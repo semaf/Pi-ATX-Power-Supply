@@ -1,0 +1,70 @@
+// Definitions for MicroChip PAC193x family of IIO chips on ARM I2C bus.
+/dts-v1/;
+/plugin/;
+
+/{
+	compatible = "brcm,bcm2835";
+
+	fragment@0 {
+		target = <&i2c_arm>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "okay";
+
+			pac193x: pac193x@10 {
+				compatible = "microchip,pac1934";
+				reg = <0x10>;
+				samp-rate = <64>;
+				status = "okay";
+
+				ch1: channel@0 {
+					//bi-dir;
+					uohms-shunt-res = <10000>; /* shunt resistor is 10 milliohm */
+					rail-name = "USB1";
+					channel_enabled;
+				};
+
+				ch2: channel@1 {
+					//bi-dir;
+					uohms-shunt-res = <10000>; /* shunt resistor is 10 milliohm */
+					rail-name = "USB2";
+					channel_enabled;
+				};
+
+				ch3: channel@2 {
+					//bi-dir;
+					uohms-shunt-res = <10000>; /* shunt resistor is 10 milliohm */
+					rail-name = "USB3";
+					channel_enabled;
+				};
+
+				ch4: channel@3 {
+					//bi-dir;
+					uohms-shunt-res = <10000>; /* shunt resistor is 10 milliohm */
+					rail-name = "USB4";
+					channel_enabled;
+				};
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&pac193x>;
+		__dormant__ {
+			compatible = "microchip,pac1932";
+		};
+	};
+	fragment@2 {
+		target = <&pac193x>;
+		__dormant__ {
+			compatible = "microchip,pac1931";
+		};
+	};
+
+	__overrides__ {
+		addr = <&pac193x>,"reg:0";
+		pac1932 = <0>, "+1";
+		pac1931 = <0>, "+2";
+	};
+};
