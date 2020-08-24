@@ -1,5 +1,5 @@
 
-\documentclass[a4paper,14pt,oneside,pdflatex,english,final,twocolumn]{article}
+\documentclass[a4paper,11pt,oneside,pdflatex,english,final,twocolumn]{article}
 
 \usepackage[utf8]{inputenc}
 \usepackage{parallel}
@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{fancyhdr}
 \usepackage{pdfpages} 
-
+\usepackage{extsizes}
 \usepackage[export]{adjustbox}
 \usepackage[margin=0.5in]{geometry}
 \addtolength{\topmargin}{0in}
@@ -18,9 +18,10 @@
 
 \setlength{\parindent}{4em}
 \setlength{\parskip}{1em}
+\setlength{\headheight}{15pt}
 \renewcommand{\baselinestretch}{1.0}
 
-\title{ATX Power Supply splitter for Raspberry Pi Clusters}
+%%\title{ATX Power Supply splitter for Raspberry Pi Clusters}
 \author{semaf}
 \date{August 2020}
 
@@ -46,7 +47,7 @@
 		\Huge \textbf{Raspberry Pi Clusters}
 	\end{minipage}
 
-	\vspace{1cm}
+	\vspace{0.5cm}
 	\begin{minipage}{0.47\textwidth}
 
 		\section{Overview}
@@ -66,12 +67,14 @@
 		\includegraphics[width=1.0\textwidth,right]{img/Alt_USB.png}
 
 	\end{minipage} \\
-	\vspace{1cm}
+	\vspace{0.5cm}
 
 	\begin{minipage}{1\textwidth}
 		\section{Description}
 		\par
-		The ATX power splitter utilizes ATX power to split the power to 8x USB port for Raspberry Pi cluster applications. Raspberry Pi Zero can be used to control the board and read voltage and current measurements by plugging it to 40-pin header connector. Voltage, current and power measurement for each channel are available on I²C bus. Raspberry Pi Zero is powered by 5V Standby current from ATX power supply. 
+		The ATX power splitter utilizes ATX power to split the power to 8x USB port for Raspberry Pi cluster applications. Raspberry Pi Zero can be used to control the board and read voltage and current measurements by plugging it to 40-pin header connector. Voltage, current and power measurement for each channel are available on I²C bus.
+		\par
+		Raspberry Pi Zero is powered by 5V Standby current from ATX power supply. 
 		\par There are 2 connectors for standard 4-pin FAN and they can be controlled by Raspberry Pi Zero with PWM output. FAN RPMs are also available for Reaspberry Pi Zero to read. One user button and one user LED are available for user programming. Button can be programmed as on/off switch for ATX power supply. 
 		\par
 		2x PAC1934 voltage and current sensors from Microchip are utilized for voltage and current measurement for each channel and values are read over I²C bus by Pi Zero. Linux kernel driver and device tree blob for current sensor are available. Device I²C addresses: 0x10, 0x1F.
@@ -79,16 +82,19 @@
 		If needed, An Ethernet over SPI module can be connected to 12-pin header to bring the ethernet functionality to Raspberry Pi Zero.
 		\par 
 		Onboard EEPROM for board specific data as well as for HAT (Hardware Attached on Top) specifications.
+		\par 
 		There is a 10-pin header for UART, I²C, SPI connections.
 	\end{minipage}
 
 	\vspace{1cm}
 	\begin{minipage}{0.47\textwidth}
-		\includegraphics[width=1.0\textwidth,right]{img/Alt_Front.png}
+		\includegraphics[width=1.0\textwidth,right,height=4cm]{img/Alt_Front.png}
+		\caption{Back view}
 	\end{minipage}
 	\hfill
 	\begin{minipage}{0.47\textwidth}
-		\includegraphics[width=1.0\textwidth,right]{img/Alt_Back.png}
+		\includegraphics[width=1.0\textwidth,right,height=4cm]{img/Alt_Back.png}
+		\caption{Front view}
 
 	\end{minipage}
 \end{figure}
@@ -99,7 +105,7 @@
 	height=\textheight,
 	keepaspectratio
 ]{Drawing.pdf}
-\vfill
+%%\vfill
 \end{document}
 
 
