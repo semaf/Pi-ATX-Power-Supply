@@ -1,9 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(pac1934-test C)
-find_library(LIBIIO libiio.so)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DIIO_CHECK_RET")
-add_executable(${PROJECT_NAME} main.c) 
+project(pac1934-test CXX)
+find_package(Threads REQUIRED)
+set(HEADER_FILES include/callbacktimer.h)
+set(CMAKE_VERBOSE_MAKEFILE ON)
+add_executable(${PROJECT_NAME}
+		src/main.cpp
+		src/device.cpp
+		${HEADER_FILES}
+		) 
+target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_link_libraries(${PROJECT_NAME} PRIVATE Threads::Threads)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${LIBIIO})
 

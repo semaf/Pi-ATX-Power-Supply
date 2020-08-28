@@ -27,8 +27,3 @@ watch -n 1 'printf "%-20s: %12.5f\n\n%-20s: %12.5f\n%-20s: %12.5f\n%-20s: %12.5f
 	   "in_energy1_scale" "$(cat "${DEVICE_PATH}in_energy1_scale")" \
 	   '
 
-#while true; do
-#	printf '%-30s: %i\r' "in_current0_raw" ${CMD}
-#	sleep 1
-#done
-#&& echo -n \"\nin_current0_mean_raw:\" && cat ${DEVICE_PATH}in_current0_mean_raw && echo -n \"in_current0_scale:\" && cat ${DEVICE_PATH}in_current0_scale"
