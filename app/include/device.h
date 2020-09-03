@@ -25,6 +25,7 @@ struct Value {
 	std::pair<std::string, float> raw;
 	std::pair<std::string, float> mean_raw;
 	std::pair<std::string, float> scale;
+	float scaled_value;
 };
 
 struct Channel {
@@ -40,7 +41,7 @@ class Device
 	public:
 		Device(int device_number, int read_interval);
 
-		std::vector<Channel> ReadChannels();
+		void ReadChannels();
 		~Device();
 
 	private:

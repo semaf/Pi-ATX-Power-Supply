@@ -4,6 +4,7 @@
 #include <iostream>
 #include "callbacktimer.h"
 #include "device.h"
+#include "mqtt/async_client.h"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
@@ -23,7 +24,22 @@ int main(int argc, char **argv) {
 	parse_options(argc, argv);
 	//Device d1(0, 1000);
 	Device d2(1, 1000);
-	// Listen to ctrl+c and assert
+
+	const std::string SERVER_ADDRESS   { "tcp://localhost:1883" };
+	const std::string CLIENT_ID                { "async_publish" };
+
+	const std::string TOPIC { "hello" };
+
+	mqtt::async_client client(SERVER_ADDRESS, CLIENT_ID);
+	mqtt::connect_options connectOptions;
+	mqtt::message willmessage(TOPIC, "test", 1, true);
+	mqtt::will_options will(willmessage);
+	connectOptions.set_will(will);
+
+	mqtt::token_ptr conn_ok = client.connect(connectOptions);
+	conn_ok->wait();
+	std::cout << " ...ok" << std::endl;
+
 	sigset_t signalSet;
 	registerSignals(signalSet);
 	waitForSignals(signalSet);
