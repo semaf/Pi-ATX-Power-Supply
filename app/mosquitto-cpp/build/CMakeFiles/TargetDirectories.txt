@@ -1,0 +1,6 @@
+/home/pi/Projects/Pi-ATX-Power-Supply/mosquitto-cpp/build/CMakeFiles/install/strip.dir
+/home/pi/Projects/Pi-ATX-Power-Supply/mosquitto-cpp/build/CMakeFiles/edit_cache.dir
+/home/pi/Projects/Pi-ATX-Power-Supply/mosquitto-cpp/build/CMakeFiles/rebuild_cache.dir
+/home/pi/Projects/Pi-ATX-Power-Supply/mosquitto-cpp/build/CMakeFiles/list_install_components.dir
+/home/pi/Projects/Pi-ATX-Power-Supply/mosquitto-cpp/build/CMakeFiles/install.dir
+/home/pi/Projects/Pi-ATX-Power-Supply/mosquitto-cpp/build/CMakeFiles/install/local.dir

@@ -1,0 +1,3 @@
+/usr/local/lib/cmake/mosquitto-cpp/mosquitto-cppTargets.cmake
+/usr/local/lib/cmake/mosquitto-cpp/mosquitto-cppConfig.cmake
+/usr/local/lib/cmake/mosquitto-cpp/mosquitto-cppConfigVersion.cmake
