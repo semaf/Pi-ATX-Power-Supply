@@ -2,10 +2,10 @@
 #include <csignal>
 #include <unistd.h>
 #include <iostream>
-#include "device.h"
-#include <mosquitto++.hpp>
 #include <mutex>
 #include <thread>
+#include "device.h"
+#include "MosquittoHub.hpp"
 
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 const std::string SERVER_ADDRESS   { "localhost" };
@@ -14,33 +14,15 @@ const int port = 1883;
 const std::string TOPIC { "/hello/" };
 const std::string MESSAGE { "{USB1:{V:5,I=1}}" };
 
-class MosquittoHub : public MosquittoCpp::MosquittoCpp {
-	public:
-		MosquittoHub(const char *id): MosquittoCpp::MosquittoCpp(id, true){}
-		virtual ~MosquittoHub() {}
-		virtual void connect() {
-			MosquittoCpp::MosquittoCpp::connect(SERVER_ADDRESS.c_str(), port, 60);
-		}
-		virtual void publish(const std::string& topic, const std::string& payload) {
-			MosquittoCpp::MosquittoCpp::publish(nullptr, topic.c_str(), payload.length(), payload.c_str(), 0, false);
-		}
-		virtual void onConnect(int rc) override {
-			std::cout << __PRETTY_FUNCTION__ << "connected to MQTT host " << SERVER_ADDRESS << std::endl;
-		}
-		virtual void subscribeTopic(const std::string& topic) {
-			int mid;
-			MosquittoCpp::MosquittoCpp::subscribe(&mid, topic.c_str(), 0);
-		}
-};
 
 std::once_flag MosquittoCpp::MosquittoCpp::init_once_;
+std::atomic_bool run(true);
 
 static void usage(int argc, char *argv[]);
-static void handle_signal(int sig);
 static void parse_options(int argc, char *argv[]);
 void waitForSignals(sigset_t& signalSet);
 void registerSignals(sigset_t& signalSet);
-
+void signalHandler(int sig);
 
 void periodicFunction(void)
 {
@@ -57,11 +39,11 @@ int main(int argc, char **argv) {
 	MosquittoHub mhub(CLIENT_ID.c_str());
 	std::string will_string{"will string"};
 	mhub.will_set("/will/", will_string.length(), will_string.c_str());
-	mhub.connect();
+	mhub.connect(SERVER_ADDRESS.c_str(), port);
 	std::cout << "connected..." << std::endl;
 
-	std::thread thread_mqtthub([&mhub](){
-		while(true)
+	std::thread thread_mqtthub([&](){
+	while(run.load(std::memory_order_acquire))
 		{
 			try {
 				mhub.loop_forever(20);
@@ -74,10 +56,11 @@ int main(int argc, char **argv) {
 	});
 
 	std::thread thread_device_read([&](){
-			while(true)
+		while(run.load(std::memory_order_acquire))
 			{
 				mhub.publish(TOPIC, MESSAGE);
-				std::this_thread::sleep_for(std::chrono::seconds(1));
+				std::this_thread::sleep_for(std::chrono::milliseconds(500));
+				std::cout << "TH ID " << std::this_thread::get_id() << " run: " << run.load() << std::endl;
 
 			}
 		});
@@ -86,13 +69,22 @@ int main(int argc, char **argv) {
 	registerSignals(signalSet);
 	waitForSignals(signalSet);
 	std::cout << "\n\nExiting...\n\n" << std::endl;
+	
 	mhub.disconnect();
+
+	std::cout << "\nDisconnected...\n\n" << std::endl;
+
 	if(thread_mqtthub.joinable()) {
+		
 		thread_mqtthub.join();
 	}
+
 	if(thread_device_read.joinable()) {
+	std::cout << "\nbefore join...\n\n" << std::endl;
 		thread_device_read.join();
+	std::cout << "\nafter join...\n\n" << std::endl;
 	}
+
 exit(0);
 }
 
@@ -122,16 +114,13 @@ static void usage(int argc, char *argv[]) {
 	printf("  -c\tread count (default no limit)\n");
 }
 
-static void handle_signal(int sig) {
-	printf("Waiting for process to finish... got signal : %d\n", sig);
-}
 
-
+void signalHandler(int sig) { run.store(false, std::memory_order_release); 
+	std::cout << "signal run: " << run << std::endl;}
 
 void registerSignals(sigset_t& signalSet) {
-	auto SignalHandler = [](int){};
-	signal(SIGTERM, SignalHandler);
-	signal(SIGINT, SignalHandler);
+	signal(SIGTERM, signalHandler);
+	signal(SIGINT, signalHandler);
 
 	sigemptyset(&signalSet);
 	sigaddset(&signalSet, SIGINT);

@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/powermeter.dir/main.cpp.o CMakeFiles/powermeter.dir/device.cpp.o  -o powermeter -lmosquitto -pthread 

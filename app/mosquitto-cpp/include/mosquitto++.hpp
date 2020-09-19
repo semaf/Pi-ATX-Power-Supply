@@ -190,13 +190,13 @@ class MosquittoCpp : public IMosquittoCpp {
     return result;
   }
 
-  virtual void onConnect(int /*rc*/) { return; }
-  virtual void onDisconnect(int /*rc*/) { return; }
-  virtual void onPublish(int /*mid*/) { return; }
-  virtual void onMessage(const struct mosquitto_message * /*message*/) { return; }
-  virtual void onSubscribe(int /*mid*/, int /*qos_count*/, const int * /*granted_qos*/) { return; }
-  virtual void onUnsubscribe(int /*mid*/) { return; }
-  virtual void onLog(int /*level*/, const char * /*str*/) { return; }
+  virtual void onConnect(int) { return; }
+  virtual void onDisconnect(int) { return; }
+  virtual void onPublish(int) { return; }
+  virtual void onMessage(const struct mosquitto_message *) { return; }
+  virtual void onSubscribe(int, int, const int *) { return; }
+  virtual void onUnsubscribe(int) { return; }
+  virtual void onLog(int, const char *) { return; }
   virtual void onError() { return; }
 };
 
