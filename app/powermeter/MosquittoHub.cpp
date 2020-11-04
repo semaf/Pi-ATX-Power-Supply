@@ -14,7 +14,7 @@ void MosquittoHub::publish(const std::string& topic, const std::string& payload)
 }
 
 void MosquittoHub::onConnect(int rc) {
-	std::cout << __PRETTY_FUNCTION__ << "connected to MQTT host " << server_address_ << std::endl;
+	std::cout << "Connected to MQTT host " << server_address_ << std::endl;
 }
 
 void MosquittoHub::subscribeTopic(const std::string& topic) {
